@@ -139,8 +139,9 @@ validator.Validate(customer, options =>
 });
 ```
 
-# Complex Properties
+It is also possible to customize type of exception thrown, [which is covered in this section](advanced.html#customizing-the-validation-exception).
 
+# Complex Properties
 
 Validators can be re-used for complex properties. For example, imagine you have two classes, Customer and Address:
 
@@ -156,7 +157,7 @@ public class Address
   public string Line1 { get; set; }
   public string Line2 { get; set; }
   public string Town { get; set; }
-  public string County { get; set; }
+  public string Country { get; set; }
   public string Postcode { get; set; }
 }
 ```

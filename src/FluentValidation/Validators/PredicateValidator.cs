@@ -16,34 +16,32 @@
 // The latest version of this file can be found at https://github.com/FluentValidation/FluentValidation
 #endregion
 
-namespace FluentValidation.Validators {
-	using Internal;
-	using Resources;
+namespace FluentValidation.Validators;
 
-	public class PredicateValidator<T,TProperty> : PropertyValidator<T,TProperty>, IPredicateValidator {
-		public delegate bool Predicate(T instanceToValidate, TProperty propertyValue, ValidationContext<T> propertyValidatorContext);
+using System;
 
-		private readonly Predicate _predicate;
+public class PredicateValidator<T,TProperty> : PropertyValidator<T,TProperty>, IPredicateValidator {
 
-		public override string Name => "PredicateValidator";
+	private readonly Func<T, TProperty, ValidationContext<T>, bool> _predicate;
 
-		public PredicateValidator(Predicate predicate) {
-			predicate.Guard("A predicate must be specified.", nameof(predicate));
-			this._predicate = predicate;
-		}
+	public override string Name => "PredicateValidator";
 
-		public override bool IsValid(ValidationContext<T> context, TProperty value) {
-			if (!_predicate(context.InstanceToValidate, value, context)) {
-				return false;
-			}
-
-			return true;
-		}
-
-		protected override string GetDefaultMessageTemplate(string errorCode) {
-			return Localized(errorCode, Name);
-		}
+	public PredicateValidator(Func<T, TProperty, ValidationContext<T>, bool> predicate) {
+		ArgumentNullException.ThrowIfNull(predicate);
+		_predicate = predicate;
 	}
 
-	public interface IPredicateValidator : IPropertyValidator { }
+	public override bool IsValid(ValidationContext<T> context, TProperty value) {
+		if (!_predicate(context.InstanceToValidate, value, context)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	protected override string GetDefaultMessageTemplate(string errorCode) {
+		return Localized(errorCode, Name);
+	}
 }
+
+public interface IPredicateValidator : IPropertyValidator { }

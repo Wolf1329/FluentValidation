@@ -1,3 +1,98 @@
+12.0.0 -
+Drops support for netstandard2.0, netstandard2.1 and .net 5. Minimum supported platform is now .net 6.
+Add support for dependent rules for custom rules (#2170)
+Removes deprecated DI extensions
+Removes deprecated transform methods (#2027)
+Remove the ability to disable the root-model null check (#2069)
+Use Zomp.SyncMethodGenerator to clean up internal sync/async code paths (#2136)
+Add Serbian (Cyrillic) language; rename existing Serbian to Serbian (Latin) (#2283)
+
+11.11.0 - 16 Nov 2024
+Add additional overload of WithState that takes a context (#2276)
+
+11.10.0 - 15 Sep 2024
+Add WhereAsync as conterpart to Where on collection rules (#2240)
+Create IEnumValidator to expose the targeted Enum type of EnumValidator (#2244)
+Add Romansh language translations (#2239)
+
+11.9.2 - 10 Jun 2024
+ScalePrecisionValidator error message clarification (#2211)
+
+11.9.1 - 23 Apr 2024
+Fix issue with CascadeMode on child validators (#2207)
+
+11.9.0 - 21 Dec 2023
+Fix memory leak in NotEmptyValidator/EmptyValidator (#2174)
+Add more descriptive error messages if a rule throws a NullReferenceException (#2152)
+Add support for caching root parameter expressions (eg RuleFor(x => x)) (#2168)
+Add builds for .net 8
+Prevent AddValidatorsFromAssemblyContaining from registering validators twice (#2182)
+
+11.8.1 - 22 Nov 2023
+Fix unintentional behavioural changes in introduced in the previous release as part of #2158
+
+11.8.0 - 19 Oct 2023
+Added AbstractValidator.OnRuleAdded to allow customization of rule instances after creation (#2114)
+Fix Serbian translation of LengthValidator (#2147)
+Fix chinese culture codes (#2151)
+Add Khmer translations (#2155)
+Various performance improvements (#2158)
+Fix ChildRules with class hierarchies (#2165)
+
+11.7.1 - 12 Aug 2023
+Resolved issue with combining multiple ValidationResult instances where RuleSetsExecuted wasn't properly set on the combined result (#2125)
+
+11.7.0 - 11 Aug 2023
+Add additional constructor for combining multiple ValidationResult instances (#2125)
+Add PropertyPath placeholder (#2134)
+Fix Brazilian Portuguese translation (#2131)
+
+11.6.0 - 4 Jul 2023
+Add OnFailurecCreated callback in ValidatorOptions.Global (#2120)
+Fix typo in Russian localization (#2102)
+Add Tajik language (#2108)
+Fixed some typos in Validator Extension docblocks (#2118)
+
+11.5.2 - 7 Apr 2023
+Resolve issue with ruleset propogation for multiple levels of child rules (#2097)
+
+11.5.1 - 20 Feb 2023
+Deprecated the ability to disable the root model null check via overriding AbstractValidator.EnsureInstanceNotNull (#2069)
+Deprecated the Transform and TransformAsync methods (#2072)
+
+11.5.0 - 13 Feb 2023
+MemberNameValidatorSelector now supports wildcard indexes in property paths (#2056)
+Added overload of TestValidateAsync that accepts a context (#2052)
+Minor optimization to regex validator (#2035)
+Added Kazakh translations (#2036)
+Added Catalan translations and updated Spanish translations (#2050)
+Updates to Uzbek Latin and Cyrillic translations (#2040/#2041/#2045)
+Updates to Italian translations (#2039)
+Updates to French translations (#2065)
+
+11.4.0 - 23 Nov 2022
+Deprecate ScalePrecision validator and introduce PrecisionScale validator as its replacement (#2030)
+
+11.3.0 - 10 Nov 2022
+Annotate string parameters with StringSyntaxAttribute.Regex in net7 builds (#1957)
+Fixes to SourceLink integration (#2019)
+Add Uzbek Latin and Cyrillic languages (#2013)
+Updates to Danish language (#2012)
+
+11.2.2 - 11 September 2022
+MemberNameValidatorSelector should make use of PropertyNameResolver when parsing expressions (#2003)
+
+11.2.1 - 28 August 2022
+Fix test helper .Only() not taking into account parent-level unmatched failures (#1986)
+
+11.2.0 - 8 August 2022
+Resolve issue with unexpected results when with nested Include calls with the MemberNameValidatorSelector (#1989)
+Add a new Selector Factory for the Composite Selector (#1988)
+
+11.1.1 - 6 August 2022
+Fix issue with incorrect rulesets being executed in a child validator when combined with ChildRules (#1981)
+Bulgarian translations of default messages (#1973)
+
 11.1.0 - 22 June 2022
 Added a ToDictionary method to ValidationResult
 MVC auto validation: Deprecated Implicit validation of child properties (#1960)

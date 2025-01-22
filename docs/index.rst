@@ -8,14 +8,10 @@ FluentValidation
 
 FluentValidation is a .NET library for building strongly-typed validation rules.
 
-FluentValidation 11 supports the following platforms:
+* FluentValidation 12 (currently in Preview) supports .NET 8 and newer.
+* FluentValidation 11 supports .NET Standard 2.0, .NET Core 3.1, .NET 5 and newer. 
 
-* .NET Core 3.1
-* .NET 5
-* .NET 6
-* `.NET Standard 2.0 <https://docs.microsoft.com/en-us/dotnet/standard/net-standard>`_
-
-For automatic validation with ASP.NET, FluentValidation supports ASP.NET running on .NET Core 3.1, .NET 5 or .NET 6.
+If you're moving from FluentValidation 11 to 12 please review the :doc:`upgrading-to-12`
 
 If you're new to using FluentValidation, check out the :doc:`start` page.
 
@@ -80,6 +76,7 @@ Example
   :caption: Other Features
 
   including-rules
+  specific-properties
   rulesets
   cascade
   di
@@ -109,7 +106,6 @@ Example
 
   dependentrules
   inheritance
-  transform
   advanced
 
 .. _aspnet-docs:
@@ -125,6 +121,7 @@ Example
   :maxdepth: 1
   :caption: Upgrading
 
+  upgrading-to-12
   upgrading-to-11
   upgrading-to-10
   upgrading-to-9

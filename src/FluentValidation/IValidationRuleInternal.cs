@@ -16,19 +16,20 @@
 // The latest version of this file can be found at https://github.com/FluentValidation/FluentValidation
 #endregion
 
-namespace FluentValidation {
-	using System.Collections.Generic;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Internal;
+namespace FluentValidation;
 
-	internal interface IValidationRuleInternal<T> : IValidationRule<T> {
-		ValueTask ValidateAsync(ValidationContext<T> context, bool useAsync, CancellationToken cancellation);
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Internal;
 
-		void AddDependentRules(IEnumerable<IValidationRuleInternal<T>> rules);
-	}
+internal interface IValidationRuleInternal<T> : IValidationRule<T> {
+	ValueTask ValidateAsync(ValidationContext<T> context, CancellationToken cancellation);
+	void Validate(ValidationContext<T> context);
 
-	internal interface IValidationRuleInternal<T, TProperty> : IValidationRule<T, TProperty>, IValidationRuleInternal<T> {
-		new List<RuleComponent<T,TProperty>> Components { get; }
-	}
+	void AddDependentRules(IEnumerable<IValidationRuleInternal<T>> rules);
+}
+
+internal interface IValidationRuleInternal<T, TProperty> : IValidationRule<T, TProperty>, IValidationRuleInternal<T> {
+	new List<RuleComponent<T,TProperty>> Components { get; }
 }

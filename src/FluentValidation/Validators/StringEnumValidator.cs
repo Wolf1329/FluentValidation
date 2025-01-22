@@ -16,44 +16,41 @@
 // The latest version of this file can be found at https://github.com/FluentValidation/FluentValidation
 #endregion
 
-namespace FluentValidation.Validators {
-	using System;
-	using System.Linq;
-	using System.Reflection;
-	using FluentValidation.Internal;
-	using Resources;
+namespace FluentValidation.Validators;
 
-	public class StringEnumValidator<T> : PropertyValidator<T, string> {
-		private readonly Type _enumType;
-		private readonly bool _caseSensitive;
+using System;
+using System.Linq;
 
-		public override string Name => "StringEnumValidator";
+public class StringEnumValidator<T> : PropertyValidator<T, string> {
+	private readonly bool _caseSensitive;
+	private readonly string[] _enumNames;
 
-		public StringEnumValidator(Type enumType, bool caseSensitive) {
-			if (enumType == null) throw new ArgumentNullException(nameof(enumType));
+	public override string Name => "StringEnumValidator";
 
-			CheckTypeIsEnum(enumType);
+	public StringEnumValidator(Type enumType, bool caseSensitive) {
+		if (enumType == null) throw new ArgumentNullException(nameof(enumType));
 
-			_enumType = enumType;
-			_caseSensitive = caseSensitive;
+		CheckTypeIsEnum(enumType);
+
+		_caseSensitive = caseSensitive;
+		_enumNames = Enum.GetNames(enumType);
+	}
+
+	public override bool IsValid(ValidationContext<T> context, string value) {
+		if (value == null) return true;
+		var comparison = _caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+		return _enumNames.Any(n => n.Equals(value, comparison));
+	}
+
+	private void CheckTypeIsEnum(Type enumType) {
+		if (!enumType.IsEnum) {
+			string message = $"The type '{enumType.Name}' is not an enum and can't be used with IsEnumName.";
+			throw new ArgumentOutOfRangeException(nameof(enumType), message);
 		}
+	}
 
-		public override bool IsValid(ValidationContext<T> context, string value) {
-			if (value == null) return true;
-			var comparison = _caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-			return Enum.GetNames(_enumType).Any(n => n.Equals(value, comparison));
-		}
-
-		private void CheckTypeIsEnum(Type enumType) {
-			if (!enumType.IsEnum) {
-				string message = $"The type '{enumType.Name}' is not an enum and can't be used with IsEnumName.";
-				throw new ArgumentOutOfRangeException(nameof(enumType), message);
-			}
-		}
-
-		protected override string GetDefaultMessageTemplate(string errorCode) {
-			// Intentionally the same message as EnumValidator.
-			return Localized(errorCode, "EnumValidator");
-		}
+	protected override string GetDefaultMessageTemplate(string errorCode) {
+		// Intentionally the same message as EnumValidator.
+		return Localized(errorCode, "EnumValidator");
 	}
 }

@@ -18,36 +18,45 @@
 
 #endregion
 
-namespace FluentValidation.Validators {
-	using System;
-	using System.Collections;
-	using Resources;
+namespace FluentValidation.Validators;
 
-	public class EmptyValidator<T,TProperty> : PropertyValidator<T,TProperty> {
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
-		public override string Name => "EmptyValidator";
+public class EmptyValidator<T,TProperty> : PropertyValidator<T,TProperty> {
 
-		public override bool IsValid(ValidationContext<T> context, TProperty value) {
-			switch (value) {
-				case null:
-				case string s when string.IsNullOrWhiteSpace(s):
-				case ICollection {Count: 0}:
-				case Array {Length: 0}:
-				case IEnumerable e when !e.GetEnumerator().MoveNext():
-					return true;
-			}
+	public override string Name => "EmptyValidator";
 
-			//TODO: Rewrite to avoid boxing
-			if (Equals(value, default(TProperty))) {
-				// Note: Code analysis indicates "Expression is always false" but this is incorrect.
-				return true;
-			}
-
-			return false;
+	public override bool IsValid(ValidationContext<T> context, TProperty value) {
+		if (value == null) {
+			return true;
 		}
 
-		protected override string GetDefaultMessageTemplate(string errorCode) {
-			return Localized(errorCode, Name);
+		if (value is string s && string.IsNullOrWhiteSpace(s)) {
+			return true;
+		}
+
+		if (value is ICollection col && col.Count == 0) {
+			return true;
+		}
+
+		if (value is IEnumerable e && IsEmpty(e)) {
+			return true;
+		}
+
+		return EqualityComparer<TProperty>.Default.Equals(value, default);
+	}
+
+	protected override string GetDefaultMessageTemplate(string errorCode) {
+		return Localized(errorCode, Name);
+	}
+
+	private static bool IsEmpty(IEnumerable enumerable) {
+		var enumerator = enumerable.GetEnumerator();
+
+		using (enumerator as IDisposable) {
+			return !enumerator.MoveNext();
 		}
 	}
 }

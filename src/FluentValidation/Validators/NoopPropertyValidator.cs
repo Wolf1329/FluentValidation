@@ -16,17 +16,8 @@
 // The latest version of this file can be found at https://github.com/FluentValidation/FluentValidation
 #endregion
 
-namespace FluentValidation.Validators {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Resources;
-	using Results;
+namespace FluentValidation.Validators;
 
-	public abstract class NoopPropertyValidator<T,TProperty> : PropertyValidator<T,TProperty> {
-		public override bool IsValid(ValidationContext<T> context, TProperty value) {
-			return true;
-		}
-	}
+public abstract class NoopPropertyValidator<T,TProperty> : PropertyValidator<T,TProperty> {
+	public override bool IsValid(ValidationContext<T> context, TProperty value) => true;
 }

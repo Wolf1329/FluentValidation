@@ -18,39 +18,48 @@
 
 #endregion
 
-namespace FluentValidation.Validators {
-	using System;
-	using System.Collections;
-	using Resources;
+namespace FluentValidation.Validators;
 
-	public class NotEmptyValidator<T,TProperty> : PropertyValidator<T, TProperty>, INotEmptyValidator {
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
-		public override string Name => "NotEmptyValidator";
+public class NotEmptyValidator<T,TProperty> : PropertyValidator<T, TProperty>, INotEmptyValidator {
 
-		public override bool IsValid(ValidationContext<T> context, TProperty value) {
-			switch (value) {
-				case null:
-				case string s when string.IsNullOrWhiteSpace(s):
-				case ICollection {Count: 0}:
-				case Array {Length: 0}:
-				case IEnumerable e when !e.GetEnumerator().MoveNext():
-					return false;
-			}
+	public override string Name => "NotEmptyValidator";
 
-			//TODO: Rewrite to avoid boxing
-			if (Equals(value, default(TProperty))) {
-				// Note: Code analysis indicates "Expression is always false" but this is incorrect.
-				return false;
-			}
-
-			return true;
+	public override bool IsValid(ValidationContext<T> context, TProperty value) {
+		if (value == null) {
+			return false;
 		}
 
-		protected override string GetDefaultMessageTemplate(string errorCode) {
-			return Localized(errorCode, Name);
+		if (value is string s && string.IsNullOrWhiteSpace(s)) {
+			return false;
 		}
+
+		if (value is ICollection col && col.Count == 0) {
+			return false;
+		}
+
+		if (value is IEnumerable e && IsEmpty(e)) {
+			return false;
+		}
+
+		return !EqualityComparer<TProperty>.Default.Equals(value, default);
 	}
 
-	public interface INotEmptyValidator : IPropertyValidator {
+	protected override string GetDefaultMessageTemplate(string errorCode) {
+		return Localized(errorCode, Name);
 	}
+
+	private static bool IsEmpty(IEnumerable enumerable) {
+		var enumerator = enumerable.GetEnumerator();
+
+		using (enumerator as IDisposable) {
+			return !enumerator.MoveNext();
+		}
+	}
+}
+
+public interface INotEmptyValidator : IPropertyValidator {
 }
